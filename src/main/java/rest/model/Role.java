@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name ="roles")
+@Table(name = "roles")
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,13 +14,14 @@ public class Role {
     @ManyToMany
     private List<User> users;
 
-    public Role() {}
+    public Role() {
+    }
 
     public Role(String roleName) {
         this.roleName = roleName;
     }
 
-    public void addUser(User user){
+    public void addUser(User user) {
         if (users == null) {
             users = new ArrayList<>();
         }

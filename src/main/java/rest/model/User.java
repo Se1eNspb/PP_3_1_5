@@ -12,7 +12,7 @@ public class User {
     private int id;
     private String firstName;
     private String lastName;
-    private  int age;
+    private int age;
     private String email;
     private String password;
     @ManyToMany(cascade = CascadeType.PERSIST)
@@ -20,6 +20,7 @@ public class User {
 
     public User() {
     }
+
     public User(String firstName, String lastName, int age, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -83,7 +84,8 @@ public class User {
     public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
-    public void addRole(Role role){
+
+    public void addRole(Role role) {
         if (roles == null) {
             roles = new ArrayList<>();
         }

@@ -9,10 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 import rest.service.UserService;
 
 @Component
-public class Test {
+public class TestUsers {
     private final UserService userService;
     @Autowired
-    public Test(UserService userService) {
+    public TestUsers(UserService userService) {
         this.userService = userService;
     }
 

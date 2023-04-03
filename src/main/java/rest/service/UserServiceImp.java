@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -31,7 +32,7 @@ public class UserServiceImp implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findFirstByEmail(email); //TODO
+        Optional<User> user = userRepository.findFirstByEmail(email);
         if (user == null) {
             throw new UsernameNotFoundException("User with this email not found.");
         }
@@ -43,7 +44,6 @@ public class UserServiceImp implements UserService {
         return userRepository.findAll();
     }
 
-    //    Vremennoe  TODO
     @Override
     public User getUser(int id) {
         return  userRepository.findById(id).get();
@@ -52,17 +52,15 @@ public class UserServiceImp implements UserService {
     @Override
     @Transactional
     public void create(User user) {
-        userRepository.save(user);
-    }
-
-    //TODO
-    public void creatP(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
     @Override
     @Transactional
     public void update(User user) {
+        if(!Objects.equals(getUser(user.getId()).getPassword(), user.getPassword())){
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         userRepository.save(user);
     }
     @Override

@@ -18,12 +18,6 @@ public class UserController {
         return "/login";
     }
 
-    @GetMapping("/user")
-    public String userPage(Model model) {
-        UserDetailsImp details = (UserDetailsImp) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        model.addAttribute("user", details.getUser());
-        return "user/user";
-    }
     @GetMapping("/index")
     public String index(Model model) {
         UserDetailsImp details = (UserDetailsImp) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

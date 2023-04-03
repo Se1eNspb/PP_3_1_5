@@ -17,11 +17,8 @@
         <div class="col-md-12 bg-dark text-white">
             <nav class="navbar navbar-dark bg-dark">
                 <span class="navbar-text" >
-<!--   -------------------                 TODO------------------------------->
                     <span th:text="${#authentication.name}">Bob</span>
                  with roles: <span id="role" ><span th:each="role : ${#authentication.authorities}"  th:text="${role.getAuthority().replace('ROLE_',' ')}">[ROLE_USER, ROLE_ADMIN]</span></span>
-
-<!--               ------------------------------ TODO----------------------------->
                 </span>
                 <a class="nav-item text-white nav-link  mr-sm-2 " href="/logout" >Logout</a>
             </nav>
@@ -80,8 +77,6 @@
 
                                 </div>
                                 <div class="tab-pane fade" id="new-user" role="tabpanel" aria-labelledby="new-user-tab">
-<!--                                    <div class=" w-auto p-3 border-bottom bg-light">Add new user</div>-->
-
                                     <h5 class="w-100 p-3  bg-light border-bottom ">Add new user </h5>
                                     <div class="row justify-content-center">
                                         <div class=" col-6 text-center">
@@ -249,6 +244,5 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
 <script sec:authorize="hasRole('ROLE_ADMIN')" type="text/javascript" src="../static/index.js" th:src="@{index.js}" async></script>
-<!--TODO    sec!-->
 </body>
 </html>

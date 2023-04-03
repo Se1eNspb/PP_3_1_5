@@ -1,10 +1,7 @@
 package rest.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import rest.dto.UserDTO;
 import rest.model.Role;
@@ -13,7 +10,6 @@ import rest.service.UserService;
 
 import java.util.List;
 
-//TODO
 @Controller
 @RequestMapping("/rest")
 public class AdminRestController {
@@ -24,7 +20,7 @@ public class AdminRestController {
         this.userService = userService;
     }
 
-    @GetMapping()
+    @RequestMapping
     @ResponseBody
     public List<UserDTO> index() {
         return userService.index().stream().map(this::convertToUserDTO).toList();
@@ -36,19 +32,11 @@ public class AdminRestController {
         return convertToUserDTO(userService.getUser(id));
     }
 
-
-    //    @PostMapping("/add")
-    public ResponseEntity<HttpStatus> add1(@RequestBody UserDTO userDTO) {
-        userService.create(convertToUser(userDTO));
-        return ResponseEntity.ok(HttpStatus.OK);
-    }
-
     @PostMapping
     @ResponseBody
     public UserDTO add(@RequestBody UserDTO userDTO) {
         User user = convertToUser(userDTO);
         userService.create(user);
-        System.out.println(user.getId());    // TODO
         return convertToUserDTO(user);
     }
 
@@ -94,6 +82,4 @@ public class AdminRestController {
         userDTO.setRoles(roles);
         return userDTO;
     }
-
-
 }

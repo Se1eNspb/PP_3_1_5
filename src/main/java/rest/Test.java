@@ -16,20 +16,15 @@ public class Test {
         this.userService = userService;
     }
 
-
-
     @Bean
     @Transactional
     public void addDefaultUsers() {
         User user = new User("userFirstName", "userLastName",18 , "user@mail.ru","user");
         Role roleUser = new Role("ROLE_USER");
         user.addRole(roleUser);
-//        roleUser.addUser(user);
         User admin = new User("adminFirstName", "adminLastName",22, "admin@mail.ru","admin");
         Role roleAdmin = new Role("ROLE_ADMIN");
         admin.addRole(roleAdmin);
-//        admin.addRole(roleUser);
-//        roleAdmin.addUser(admin);
         userService.create(user);
         userService.create(admin);
     }

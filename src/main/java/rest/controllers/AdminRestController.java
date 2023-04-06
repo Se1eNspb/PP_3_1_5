@@ -11,6 +11,8 @@ import rest.model.Role;
 import rest.model.User;
 import rest.service.UserService;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 //TODO
@@ -26,8 +28,8 @@ public class AdminRestController {
 
     @GetMapping()
     @ResponseBody
-    public List<UserDTO> index() {
-        return userService.index().stream().map(this::convertToUserDTO).toList();
+    public List<UserDTO> getAllUsers() {
+        return userService.getAllUsers().stream().map(this::convertToUserDTO).toList();
     }
 
     @GetMapping("/{id}")
@@ -75,7 +77,7 @@ public class AdminRestController {
         for (Role role : userService.listAllRoles()) {
             for (String roleDto : userDTO.getRoles()) {
                 if (role.getRoleName().equals(roleDto)) {
-                    user.addRole(role);
+                    user.setRole(role);
                 }
             }
         }

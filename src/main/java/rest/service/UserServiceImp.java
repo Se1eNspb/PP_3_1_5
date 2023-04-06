@@ -5,7 +5,6 @@ import rest.model.Role;
 import rest.model.User;
 import rest.repositories.RoleRepository;
 import rest.repositories.UserRepository;
-import rest.security.UserDetailsImp;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,10 +35,10 @@ public class UserServiceImp implements UserService {
             throw new UsernameNotFoundException("User with this email not found.");
         }
         Hibernate.initialize(user.get().getRoles());
-        return new UserDetailsImp(user.get(),user.get().getRoles());
+        return user.get();
     }
     @Override
-    public List<User> index() {
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 

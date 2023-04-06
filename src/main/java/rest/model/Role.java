@@ -3,6 +3,7 @@ package rest.model;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name ="roles")
@@ -20,7 +21,7 @@ public class Role {
         this.roleName = roleName;
     }
 
-    public void addUser(User user){
+    public void setUser(User user){
         if (users == null) {
             users = new ArrayList<>();
         }
@@ -49,5 +50,18 @@ public class Role {
 
     public void setUsers(List<User> users) {
         this.users = users;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Role role = (Role) o;
+        return id == role.id && roleName.equals(role.roleName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, roleName);
     }
 }

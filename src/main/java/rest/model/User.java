@@ -1,12 +1,19 @@
 package rest.model;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -68,8 +75,39 @@ public class User {
         this.email = email;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Collection<SimpleGrantedAuthority> authorities = roles.stream().map(r -> new SimpleGrantedAuthority(r.getRoleName())).collect(Collectors.toList());
+        return authorities;
+    }
+    @Override
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public void setPassword(String password) {
@@ -83,10 +121,23 @@ public class User {
     public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
-    public void addRole(Role role){
+    public void setRole(Role role){
         if (roles == null) {
             roles = new ArrayList<>();
         }
         roles.add(role);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id && age == user.age && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && email.equals(user.email) && password.equals(user.password) && roles.equals(user.roles);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, age, email, password, roles);
     }
 }

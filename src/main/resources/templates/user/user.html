@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>User</title>
+</head>
+<body>
+<div class="container-fluid bg-light">
+    <div class="row ">
+        <div class="col-md-12 bg-dark text-white">
+            <nav class="navbar navbar-dark bg-dark">
+                <span class="navbar-text" >
+                    <span th:text="${#authentication.name}">Bob</span>
+                    with roles:<span th:each="role : ${#authentication.authorities}"  th:text="${role.getAuthority().replace('ROLE_',' ')}">[ROLE_USER, ROLE_ADMIN]</span>
+                </span>
+                <a class="nav-item text-white nav-link  mr-sm-2 " href="/logout" >Logout</a>
+            </nav>
+        </div>
+
+    </div>
+    <div class="row ">
+        <div class="col-md-12 bg-light">
+            <br/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 bg-white">
+            <div class="nav flex-column nav-pills"  role="tablist" aria-orientation="vertical">
+                <a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-link" href="/admin">Admin</a>
+                <a class="nav-link active">User</a>
+            </div>
+        </div>
+        <div class="col-10">
+            <div class="tab-content" i>
+                <div class="tab-pane fade show active" role="tabpanel">
+                    <h2>
+                        User information-page
+                    </h2>
+                    <div class="card">
+                        <h5 class="card-header">
+                            About user
+                        </h5>
+                        <div class="card-body">
+                            <table class="table table-hover bg-white ">
+                                <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">First name</th>
+                                    <th scope="col">Last name</th>
+                                    <th scope="col">Age</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Role</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:object="${user}">
+
+                                    <td th:text="*{id}">ID</td>
+                                    <td th:text="*{firstName}">First name</td>
+                                    <td th:text="*{lastName}">Last name</td>
+                                    <td th:text="*{age}">Age</td>
+                                    <td th:text="*{email}">Email</td>
+                                    <td><span>User</span></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

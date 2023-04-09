@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name ="roles")
+@Table(name = "roles")
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,13 +15,14 @@ public class Role {
     @ManyToMany
     private List<User> users;
 
-    public Role() {}
+    public Role() {
+    }
 
     public Role(String roleName) {
         this.roleName = roleName;
     }
 
-    public void setUser(User user){
+    public void setUser(User user) {
         if (users == null) {
             users = new ArrayList<>();
         }
@@ -64,4 +65,5 @@ public class Role {
     public int hashCode() {
         return Objects.hash(id, roleName);
     }
+
 }

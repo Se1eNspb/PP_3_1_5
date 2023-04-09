@@ -4,98 +4,52 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import rest.dto.UserDTO;
-import rest.model.Role;
 import rest.model.User;
 import rest.service.UserService;
+import rest.util.RoleCasting;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-//TODO
 @Controller
 @RequestMapping("/rest")
 public class AdminRestController {
     private final UserService userService;
+    private final RoleCasting roleCasting;
 
     @Autowired
-    public AdminRestController(UserService userService) {
+    public AdminRestController(UserService userService, RoleCasting roleCasting) {
         this.userService = userService;
+        this.roleCasting = roleCasting;
     }
 
     @GetMapping()
-    @ResponseBody
-    public List<UserDTO> getAllUsers() {
-        return userService.getAllUsers().stream().map(this::convertToUserDTO).toList();
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("/{id}")
-    @ResponseBody
-    public UserDTO getUser(@PathVariable("id") int id) {
-        return convertToUserDTO(userService.getUser(id));
-    }
-
-
-    //    @PostMapping("/add")
-    public ResponseEntity<HttpStatus> add1(@RequestBody UserDTO userDTO) {
-        userService.create(convertToUser(userDTO));
-        return ResponseEntity.ok(HttpStatus.OK);
+    public ResponseEntity<User> getUser(@PathVariable("id") int id) {
+        return ResponseEntity.ok(userService.getUser(id));
     }
 
     @PostMapping
-    @ResponseBody
-    public UserDTO add(@RequestBody UserDTO userDTO) {
-        User user = convertToUser(userDTO);
+    public ResponseEntity<User> create(@RequestBody User user) {
+        roleCasting.cast(user);
         userService.create(user);
-        System.out.println(user.getId());    // TODO
-        return convertToUserDTO(user);
+        return ResponseEntity.ok(user);
     }
 
     @PutMapping
-    @ResponseBody
-    public UserDTO update(@RequestBody UserDTO userDTO) {
-        User user = convertToUser(userDTO);
-        user.setId(userDTO.getId());
+    public ResponseEntity<User> update(@RequestBody User user) {
+        roleCasting.cast(user);
         userService.update(user);
-        return convertToUserDTO(user);
+        return ResponseEntity.ok(user);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseBody
-    public String delete(@PathVariable("id") int id) {
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") int id) {
         userService.delete(id);
-        return "User with id = " + id + " was deleted.";
+        return ResponseEntity.ok(HttpStatus.OK);
     }
-
-    private User convertToUser(UserDTO userDTO) {
-        User user = new User(userDTO.getFirstName()
-                , userDTO.getLastName(), userDTO.getAge()
-                , userDTO.getEmail(), userDTO.getPassword());
-        for (Role role : userService.listAllRoles()) {
-            for (String roleDto : userDTO.getRoles()) {
-                if (role.getRoleName().equals(roleDto)) {
-                    user.setRole(role);
-                }
-            }
-        }
-        return user;
-    }
-
-    private UserDTO convertToUserDTO(User user) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
-        userDTO.setFirstName(user.getFirstName());
-        userDTO.setLastName(user.getLastName());
-        userDTO.setAge(user.getAge());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setPassword(user.getPassword());
-        List<String> roles = user.getRoles().stream().map(Role::getRoleName).toList();
-        userDTO.setRoles(roles);
-        return userDTO;
-    }
-
-
 }
